@@ -64,7 +64,7 @@ class Game {
   }
 
   phase() { return this.state?.phase; }
-  canNet() { return location.protocol.startsWith("http") && !window.__MW_NO_NET; }
+  canNet() { return location.protocol.startsWith("http") && !window.__MW_NO_NET && !location.hostname.endsWith("github.io"); }
   hasSave() { return !!storage.get(SAVE_KEY); }
 
   // ── ソロ ──

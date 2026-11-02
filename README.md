@@ -4,6 +4,10 @@
 
 ## 遊び方
 
+**ソロならインストール不要:** https://raybbb101.github.io/mahou-sensou-v1/ (キーボードが必要です)
+
+仲間と遊ぶ場合は、サーバーを起動します。
+
 ```bash
 node server.mjs
 ```
