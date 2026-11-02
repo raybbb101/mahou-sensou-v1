@@ -4,16 +4,18 @@
 
 ## 遊び方
 
-**ソロならインストール不要:** https://raybbb101.github.io/mahou-sensou-v1/ (キーボードが必要です)
+**インストール不要:** https://raybbb101.github.io/mahou-sensou-v1/ (キーボードが必要です)
 
-仲間と遊ぶ場合は、サーバーを起動します。
+ソロは「ひとりで挑む」。協力は「仲間と挑む → 部屋を作る」でルームコードを出し、友達は同じページを開いてコードを入力します。
+ブラウザ同士を PeerJS(WebRTC)で直接つなぐのでサーバーは要りません。戦闘は部屋を作った人のブラウザで計算します。
+
+手元で動かす場合:
 
 ```bash
 node server.mjs
 ```
 
 ブラウザで http://localhost:8080 を開きます(パッケージのインストールは不要、Node 18 以上)。
-マルチは「仲間と挑む → 部屋を作る」で部屋番号を出し、同じネットワークの仲間に表示された URL と番号を伝えます。
 
 | 操作 | キー |
 |---|---|
@@ -44,7 +46,8 @@ node server.mjs
 - `src/render/` 2.5D 描画。`bosses-art.js` `hero.js` `stage.js` はこのゲームのオリジナル絵をコードで描いたもの
 - `src/ui/` メニューと HUD
 - `vendor/pixelfx/` エフェクト(MIT License、[pixelfx](https://github.com/patch-gg/pixelfx))
-- `server.mjs` 配信とマルチの部屋(依存なしの WebSocket)
+- `src/net/p2p.js` オンライン協力(PeerJS)
+- `server.mjs` 手元での配信。PeerJS が使えない環境向けの WebSocket の部屋も持つ
 
 ## 調整とテスト
 

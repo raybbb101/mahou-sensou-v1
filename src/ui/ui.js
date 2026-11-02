@@ -60,6 +60,7 @@ export class UI {
     this.hud.classList.add("hidden");
     const save = this.game.hasSave();
     const canNet = this.game.canNet();
+    this.rendered = "";
     this.root.innerHTML = `<div class="screen clear"><div class="title">
       <div class="logo">魔法戦争</div>
       <div class="sub">── 塔の二十層、魔法だけで頂へ ──</div>
@@ -87,10 +88,10 @@ export class UI {
       <div class="row">名前 <input class="input" id="nm" maxlength="10" value="${esc(name)}" placeholder="魔法使い"></div>
       <div style="height:calc(3px * var(--k))"></div>
       <button class="btn big primary" data-go="create">部屋を作る</button>
-      <div class="row">部屋番号 <input class="input" id="code" maxlength="4" inputmode="numeric" style="width:calc(50px * var(--k))"> <button class="btn" data-go="join">入る</button></div>
+      <div class="row">ルームコード <input class="input" id="code" maxlength="5" autocapitalize="characters" autocomplete="off" style="width:calc(56px * var(--k));text-transform:uppercase"> <button class="btn" data-go="join">入る</button></div>
       <div class="err">${esc(err)}</div>
       <button class="btn" data-go="back">もどる</button>
-      <div class="help" style="text-align:center">最大4人。全員が同じ塔を登り、ボスのHPは人数に応じて増える。<br>倒れた仲間は、誰かがボスに勝てば次の階で復活する。全滅すると第1層へ。</div>
+      <div class="help" style="text-align:center">部屋を作るとコードが出ます。友達はこのページを開いてコードを入力します。最大4人。<br>倒れた仲間は、誰かがボスに勝てば次の階で復活する。全滅すると第1層へ。</div>
     </div></div>`;
     this.root.onclick = (e) => {
       const b = e.target.closest("[data-go]");
@@ -105,11 +106,11 @@ export class UI {
   lobby(st, code) {
     const self = this.game.selfId;
     this.setScreen("lobby" + JSON.stringify(st.players.map((p) => p.name)) + code, `<div class="screen clear"><div class="title">
-      <div class="sub">部屋番号</div>
+      <div class="sub">ルームコード</div>
       <div class="code">${esc(code)}</div>
       <div class="players">${st.players.map((p) => `<div style="color:${p.color}">◆ ${esc(p.name)}${p.id === self ? "(あなた)" : ""}</div>`).join("")}</div>
-      <button class="btn big primary" data-act="start">塔へ入る(${st.players.length}/4)</button>
-      <div class="help" style="text-align:center">同じネットワークの仲間に、このページのアドレスと部屋番号を伝えてください。</div>
+      ${st.players[0]?.id === self ? `<button class="btn big primary" data-act="start">塔へ入る(${st.players.length}/4)</button>` : `<span class="waiting">部屋を作った人の開始を待っています…(${st.players.length}/4)</span>`}
+      <div class="help" style="text-align:center;user-select:text;-webkit-user-select:text">友達にこのページのURLとコードを伝えてください。<br>${esc(location.origin + location.pathname)}</div>
     </div></div>`);
     this.root.onclick = (e) => { if (e.target.closest('[data-act="start"]')) this.send({ type: "start" }); };
   }
