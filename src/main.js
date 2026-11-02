@@ -32,8 +32,8 @@ class Game {
     this.titleFxT = 0;
     this.last = performance.now();
     requestAnimationFrame((t) => this.loop(t));
-    // タブが裏に回ると描画は止まるが、部屋を作った人の戦闘は止めない
-    setInterval(() => { if (this.mode === "host" && document.hidden && this.phase() === "battle") this.simulate(); }, 200);
+    // 部屋を作った人の計算は描画と切り離す。画面が止まっても友達の戦闘を止めない
+    setInterval(() => { if (this.mode === "host" && this.phase() === "battle") this.simulate(); }, 33);
   }
 
   wire() {
@@ -288,8 +288,8 @@ class Game {
         if (U && me.uc >= U.charge.need) { this.ultSent = true; this.sendInput({ ult: true }); }
       }
     }
-    if (this.isLocal() && inBattle && !this.paused) this.simulate();
-    else this.lastSim = performance.now();
+    if (this.mode === "solo" && inBattle && !this.paused) this.simulate();
+    else if (this.mode !== "host") this.lastSim = performance.now();
     if (this.phase() === "battle" && this.view.curr) {
       this.ui.updateHud(this.view.curr);
       const me = this.view.curr.p.find((p) => p.id === this.selfId);
